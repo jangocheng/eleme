@@ -33,16 +33,40 @@
       <div class="detail-wrapper clearfix">
         <div class="detail-main">
           <h1 class="name">{{seller.name}}</h1>
+          <div class="star-wrapper">
+            <star :score="seller.score" :size="48"></star>
+          </div>
+          <div class="title">
+            <div class="line"></div>
+            <div class="text">优惠信息</div>
+            <div class="line"></div>
+          </div>
+          <ul v-if="seller.supports" class="supports">
+            <li class="supports-item" v-for="(item, index) in seller.supports">
+              <i class="icon" :class="classMap[seller.supports[index].type]"></i>
+              <span class="text">{{seller.supports[index].description}}</span>
+            </li>
+          </ul>
+          <div class="title" style="margin-bottom: 24px;">
+            <div class="line"></div>
+            <div class="text">商家公告</div>
+            <div class="line"></div>
+          </div>
+          <p class="bulletin">
+            {{seller.bulletin}}
+          </p>
         </div>
       </div>
       <div class="detail-close">
-        <i class="icon-close"></i>
+        <i class="icon-close" @click="hideDetail"></i>
       </div>
     </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+import Star from '../star/Stars';
+
 export default {
   name: 'header',
   props: {
@@ -52,16 +76,22 @@ export default {
   },
   data() {
     return {
-      detailShow: true,
+      detailShow: false,
     };
   },
   created() {
-    this.classMap = ['decrease', 'discount', 'special', 'invoice', 'gurantee'];
+    this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
   },
   methods: {
     showDetail() {
       this.detailShow = true;
     },
+    hideDetail() {
+      this.detailShow = false;
+    },
+  },
+  components: {
+    Star,
   },
 };
 </script>
@@ -200,11 +230,60 @@ export default {
         padding-bottom 64px
       .name
         text-align center
-        margin-bottom 32px
         font-size 16px
         font-weight 700
         color #fff
         line-height 16px
+      .star-wrapper
+        padding 16px 0 28px 0
+        text-align center
+      .title
+        display flex
+        width 80%
+        margin 0 auto 24px auto
+        .line
+          flex 1
+          position relative
+          top -6px
+          border-bottom 1px solid rgba(255, 255, 255, 0.2)
+        .text
+          padding 0 12px
+          font-size 14px
+      .supports
+        width 80%
+        margin 12px auto 28px
+        .supports-item
+          font-size 0
+          line-height 12px
+          margin-top 12px
+          padding-left 12px
+          .icon
+            display inline-block
+            vertical-align top
+            width 16px
+            height 16px
+            margin-right 6px
+            background-size 16px 16px
+            &.decrease
+              bg-image('decrease_1')
+            &.special
+              bg-image('special_1')
+            &.discount
+              bg-image('discount_1')
+            &.guarantee
+              bg-image('guarantee_1')
+            &.invoice
+              bg-image('invoice_1')
+          .text
+            font-size 12px
+            font-weight 200
+      .bulletin
+        width 80%
+        margin 0 auto
+        text-indent 2em
+        font-size 12px
+        font-weight 200px
+        line-height 24px
     .detail-close
       position relative
       width 32px
