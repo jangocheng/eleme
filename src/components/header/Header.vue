@@ -32,10 +32,12 @@
     <div v-show="detailShow" class="detail">
       <div class="detail-wrapper clearfix">
         <div class="detail-main">
-
+          <h1 class="name">{{seller.name}}</h1>
         </div>
       </div>
-      <div class="detail-close"></div>
+      <div class="detail-close">
+        <i class="icon-close"></i>
+      </div>
     </div>
   </div>
 </template>
@@ -50,7 +52,7 @@ export default {
   },
   data() {
     return {
-      detailShow: false,
+      detailShow: true,
     };
   },
   created() {
@@ -190,5 +192,24 @@ export default {
     height 100%
     overflow auto
     background rgba(7, 17, 27, 0.8)
-    filter blur(10px)
+    .detail-wrapper
+      min-height 100%
+      width 100%
+      .detail-main
+        margin-top 64px
+        padding-bottom 64px
+      .name
+        text-align center
+        margin-bottom 32px
+        font-size 16px
+        font-weight 700
+        color #fff
+        line-height 16px
+    .detail-close
+      position relative
+      width 32px
+      height 32px
+      font-size 32px
+      margin -64px auto 0 auto
+      clear both
 </style>
