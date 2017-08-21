@@ -1,51 +1,51 @@
 <template>
-    <div class="star" :class="starType">
-      <span v-for="(item, index) in itemClasses" :class="item" class="star-item">
+  <div class="star" :class="starType">
+    <span v-for="(item, index) in itemClasses" :class="item" class="star-item">
 
-      </span>
-    </div>
+    </span>
+  </div>
 </template>
 
 <script type="text/ecmascript-6">
-  const LENGTH = 5;
-  const CLS_ON = 'on';
-  const CLS_OFF = 'off';
-  const CLS_HALF = 'half';
-  export default {
-    name: '',
-    props: {
-      size: {
-        type: Number,
-      },
-      score: {
-        type: Number,
-      },
+const LENGTH = 5;
+const CLS_ON = 'on';
+const CLS_OFF = 'off';
+const CLS_HALF = 'half';
+export default {
+  name: '',
+  props: {
+    size: {
+      type: Number,
     },
-    data() {
-      return {};
+    score: {
+      type: Number,
     },
-    computed: {
-      starType() {
-        return 'star-48';
-      },
-      itemClasses() {
-        const result = [];
-        const score = Math.floor(this.score * 2) / 2;
-        const hasDecimal = score % 1 !== 0;
-        const integer = Math.floor(score);
-        for (let i = 0; i < integer; i++) {
-          result.push(CLS_ON);
-        }
-        if (hasDecimal) {
-          result.push(CLS_HALF);
-        }
-        while (result.length < LENGTH) {
-          result.push(CLS_OFF);
-        }
-        return result;
-      },
+  },
+  data() {
+    return {};
+  },
+  computed: {
+    starType() {
+      return 'star-48';
     },
-  };
+    itemClasses() {
+      const result = [];
+      const score = Math.floor(this.score * 2) / 2;
+      const hasDecimal = score % 1 !== 0;
+      const integer = Math.floor(score);
+      for (let i = 0; i < integer; i += 1) {
+        result.push(CLS_ON);
+      }
+      if (hasDecimal) {
+        result.push(CLS_HALF);
+      }
+      while (result.length < LENGTH) {
+        result.push(CLS_OFF);
+      }
+      return result;
+    },
+  },
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

@@ -33,7 +33,7 @@ export default {
       const res = response.data;
       if (res.code === 0) {
         that.seller = res.data;
-        console.log(that.seller);
+//        console.log(that.seller);
       }
     });
   },
@@ -45,6 +45,7 @@ export default {
 
 <style lang="stylus" rel="stylesheet/stylus">
   @import "commom/stylus/base"
+  @import "commom/stylus/mixin"
   #app
     .tab
       display flex
@@ -52,6 +53,7 @@ export default {
       height 40px
       line-height 40px
       justify-content space-around
+      border-1px(#e5e5e5)
     .tab-item
       text-align center
       flex 1
