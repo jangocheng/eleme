@@ -10,18 +10,23 @@ export default new Router({
   mode: 'history',
   routes: [
     {
+      path: '/',
+      name: 'goods',
+      component: Goods,
+    },
+    {
       path: '/seller',
-      name: 'Seller',
+      name: 'seller',
       component: Seller,
     },
     {
       path: '/goods',
-      name: 'Goods',
+      name: 'goods',
       component: Goods,
     },
     {
       path: '/ratings',
-      name: 'Ratings',
+      name: 'ratings',
       component: Ratings,
     },
   ],

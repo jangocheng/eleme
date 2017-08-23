@@ -2,7 +2,7 @@
   <div class="goods">
     <div class="menu-wrapper" ref="menuWrapper">
       <ul v-if="goods">
-        <li v-for="(item, index) in goods" class="menu-item border-1px" :class="{'current':currentIndex===index}">
+        <li v-for="(item, index) in goods" class="menu-item border-1px" :class="{'current':currentIndex===index}" @click="selectMenu(index,$event)">
           <span class="text">
             <span v-show="item.type>0" :class="classMap[item.type]" class="icon"></span>{{item.name}}
           </span>
@@ -11,7 +11,7 @@
     </div>
     <div class="foods-wrapper" ref="foodsWrapper">
       <ul>
-        <li v-for="(item, index) in goods" class="foods-list foot-list-hook" @click="selectMenu(index)">
+        <li v-for="(item, index) in goods" class="foods-list foot-list-hook">
           <h1 class="title">{{item.name}}</h1>
           <ul>
             <li v-for="(food, index) in item.foods" class="food-item">
@@ -35,11 +35,13 @@
         </li>
       </ul>
     </div>
+    <shop-cart :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"></shop-cart>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
 import BScroll from 'better-scroll';
+import ShopCart from '../shopCart/ShopCart';
 
 export default {
   name: 'goods',
@@ -55,6 +57,9 @@ export default {
       scrollY: 0,
     };
   },
+  components: {
+    ShopCart,
+  },
   created() {
     const that = this;
     this.$http.get('/api/goods').then((respnnse) => {
@@ -62,8 +67,8 @@ export default {
       if (res.code === 0) {
         that.goods = res.data;
       }
+      console.log(this.seller);
       this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
-      console.log(this.$refs);
       this.$nextTick(() => {
         this.initScroll();
         this.calculateHeight();
@@ -105,7 +110,9 @@ export default {
       }
     },
     selectMenu(index) {
-      console.log(index);
+      const footList = this.$refs.foodsWrapper.getElementsByClassName('foot-list-hook');
+      const el = footList[index];
+      this.foodsScroll.scrollToElement(el, 500);
     },
   },
 };
