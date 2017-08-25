@@ -14,6 +14,17 @@
       <div class="content-right">
         <div class="pay" :class="payClass">{{ payDesc }}</div>
       </div>
+      <div class="ball-container">
+        <transition name="drop">
+          <div class="ball" v-for="ball in balls" v-show="ball.show"></div>
+        </transition>
+      </div>
+      <div class="shopcart-list" v-show="listShow">
+        <div class="list-header">
+          <h1 class="title">购物车</h1>
+        </div>
+        <div class="list-content"></div>
+      </div>
     </div>
   </div>
 </template>
@@ -25,12 +36,7 @@ export default {
     selectFoods: {
       type: Array,
       default() {
-        return [
-          {
-            price: 30,
-            count: 1,
-          },
-        ];
+        return [];
       },
     },
     deliveryPrice: {
@@ -43,7 +49,13 @@ export default {
     },
   },
   data() {
-    return {};
+    return {
+      balls: [
+        {
+          show: false,
+        },
+      ],
+    };
   },
   computed: {
     totalPrice() {
@@ -70,9 +82,7 @@ export default {
       return '去结算';
     },
     payClass() {
-      if (this.totalPrice === 0) {
-        return '';
-      } else if (this.totalPrice < this.minPrice) {
+      if (this.totalPrice < this.minPrice) {
         return 'not-enough';
       }
       return 'enough';
@@ -167,4 +177,16 @@ export default {
         &.enough
           background: #00b43c
           color: #fff
+  .ball-container
+    .ball
+      position fixed
+      left 32px
+      bottom 22px
+      z-index 200
+      width 16px
+      height 16px
+      border-radius 50%
+      background rgb(0, 160, 220)
+  .drop-enter-active
+    transition all .4s
 </style>

@@ -29,19 +29,23 @@
                   <span class="nowPrice">￥{{food.price}}</span>
                   <span class="oldPrice" v-show="food.oldPrice">{{food.oldPrice}}</span>
                 </div>
+                <div class="cart-controll-erapper">
+                  <cart-controll :food="food"></cart-controll>
+                </div>
               </div>
             </li>
           </ul>
         </li>
       </ul>
     </div>
-    <shop-cart :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"></shop-cart>
+    <shop-cart :select-foods="selectedFoods" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shop-cart>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
 import BScroll from 'better-scroll';
 import ShopCart from '../shopCart/ShopCart';
+import CartControll from '../cartControll/CartControll';
 
 export default {
   name: 'goods',
@@ -59,6 +63,7 @@ export default {
   },
   components: {
     ShopCart,
+    CartControll,
   },
   created() {
     const that = this;
@@ -86,6 +91,17 @@ export default {
       }
       return 0;
     },
+    selectedFoods() {
+      const foods = [];
+      this.goods.forEach((good) => {
+        good.foods.forEach((food) => {
+          if (food.count) {
+            foods.push(food);
+          }
+        });
+      });
+      return foods;
+    },
   },
   methods: {
     initScroll() {
@@ -94,6 +110,7 @@ export default {
       });
       this.foodsScroll = new BScroll(this.$refs.foodsWrapper, {
         probeType: 3,
+        tap: true,
       });
       this.foodsScroll.on('scroll', (pos) => {
         this.scrollY = Math.abs(Math.round(pos.y));
@@ -186,6 +203,7 @@ export default {
     .food-item
       margin 18px
       display flex
+      position relative
       border-1px(rgba(7, 17, 27, 0.1))
       &:last-child
         border-none()
@@ -226,5 +244,8 @@ export default {
             font-size 10px
             color rgb(147, 153, 159)
             text-decoration line-through
-
+        .cart-controll-erapper
+          position: absolute
+          right 0
+          bottom 0
 </style>

@@ -2,7 +2,7 @@
   <div class="header">
     <div class="content-wrapper">
       <div class="avatar">
-        <img @click="touchHandler " :src="seller.avatar" width="64" height="64" alt="">
+        <img :src="seller.avatar" width="64" height="64" alt="">
       </div>
       <div class="content">
         <div class="title">
@@ -88,9 +88,6 @@ export default {
     },
     hideDetail() {
       this.detailShow = false;
-    },
-    touchHandler() {
-      console.log(0);
     },
   },
   components: {
