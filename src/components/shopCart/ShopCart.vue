@@ -1,6 +1,6 @@
 <template>
   <div class="shopcart">
-    <div class="content">
+    <div class="content" @click="toggleList($event)">
       <div class="content-left">
         <div class="logo-wrapper">
           <div class="logo" :class="{'highlight': totalCount>0}">
@@ -19,17 +19,38 @@
           <div class="ball" v-for="ball in balls" v-show="ball.show"></div>
         </transition>
       </div>
-      <div class="shopcart-list" v-show="listShow">
+      <!--<transition name="shopcart-move">-->
+      <div class="shopcart-list" v-show="showList">
         <div class="list-header">
           <h1 class="title">购物车</h1>
+          <span class="clear">清空</span>
         </div>
-        <div class="list-content"></div>
+        <div class="list-content" ref="shopcartList">
+          <ul>
+            <li class="food" v-for="food in selectFoods">
+              <span class="name">{{ food.name }}</span>
+              <div class="price">
+                <span class="">
+                  ￥{{ food.price * food.count }}
+                </span>
+              </div>
+              <div class="cartcontroll-wrapper">
+                <cart-controll :food="food"></cart-controll>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="filter"></div>
       </div>
+      <!--</transition>-->
     </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+import BScroll from 'better-scroll';
+import CartControll from '../cartControll/CartControll';
+
 export default {
   name: '',
   props: {
@@ -55,7 +76,16 @@ export default {
           show: false,
         },
       ],
+      showList: false,
     };
+  },
+  components: {
+    CartControll,
+  },
+  created() {
+    this.$nextTick(() => {
+      this.initScroll();
+    });
   },
   computed: {
     totalPrice() {
@@ -88,11 +118,26 @@ export default {
       return 'enough';
     },
   },
+  methods: {
+    initScroll() {
+      this.shopcartScroll = new BScroll(this.$refs.shopcartList, {
+        preventDefault: false,
+      });
+    },
+    toggleList() {
+      if (!this.totalCount) {
+        this.showList = false;
+        return;
+      }
+      this.showList = !this.showList;
+    },
+  },
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="stylus" rel="stylesheet/stylus">
+@import "../../commom/stylus/mixin"
 
 .shopcart
   position fixed
@@ -189,4 +234,63 @@ export default {
       background rgb(0, 160, 220)
   .drop-enter-active
     transition all .4s
+  .shopcart-list
+    position absolute
+    top -258px
+    height 258px
+    left 0
+    z-index -1
+    width 100%
+    .filter
+      position absolute
+      width 100%
+      height 100%
+      background rgba(7, 17, 27, 0.6)
+    .list-header
+      height 40px
+      line-height 40px
+      display flex
+      background #f3f5f7
+      padding 0 18px
+      border-1px(rgba(7, 17, 27, 0.1))
+      .title
+        flex 1
+        font-size 14px
+      .clear
+        color: rgb(0, 160, 220)
+        font-size 12px
+    .list-content
+      background #fff
+      position absolute
+      top 40px
+      bottom 0
+      width 100%
+      z-index 10
+      overflow hidden
+      ul
+        padding 0 18px
+        .food
+          border-1px(rgba(7, 17, 27, 0.1))
+          padding 6px 0
+          font-size 0
+          .name
+            vertical-align middle
+            line-height 24px
+            display inline-block
+            font-size 14px
+            color rgb(7, 17, 27)
+            width 210px
+          .price
+            vertical-align middle
+            line-height 24px
+            display inline-block
+            font-size 14px
+            color rgb(240, 20, 20)
+            span
+              font-weight 700
+          .cartcontroll-wrapper
+            position absolute
+            top 0
+            right 0
+            display inline-block
 </style>
