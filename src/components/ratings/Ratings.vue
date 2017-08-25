@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div class="" v-touch:tap="tapHandler"  v-touch:swipe="swipeHandler">
     ratings
   </div>
 </template>
@@ -9,6 +9,14 @@ export default {
   name: '',
   data() {
     return {};
+  },
+  methods: {
+    tapHandler() {
+      alert(3);
+    },
+    swipeHandler(dir) {
+      console.log(dir);
+    },
   },
 };
 </script>

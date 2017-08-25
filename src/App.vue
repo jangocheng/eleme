@@ -33,7 +33,7 @@ export default {
       const res = response.data;
       if (res.code === 0) {
         that.seller = res.data;
-        console.log(that.seller);
+//        console.log(that.seller);
       }
     });
   },

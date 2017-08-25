@@ -38,6 +38,7 @@ module.exports = {
     'semi': ['error', 'always'],
     'no-console': ["error", { allow: ["warn", "error", "log"] }],
     // "no-plusplus": 0,
-    "linebreak-style": 0
+    "linebreak-style": 0,
+    'no-alert': 0
   }
 }
