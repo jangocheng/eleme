@@ -1,29 +1,30 @@
 <template>
-  <div class="shopcart">
-    <div class="content">
-      <div @click="toggleList($event)" class="content-left">
-        <div class="logo-wrapper">
-          <div class="logo" :class="{'highlight': totalCount>0}">
-            <i class="icon-shopping_cart" :class="{'highlight': totalCount>0}"></i>
+  <div>
+    <div class="shopcart" @click="toggleList($event)">
+      <div class="content">
+        <div class="content-left">
+          <div class="logo-wrapper">
+            <div class="logo" :class="{'highlight': totalCount>0}">
+              <i class="icon-shopping_cart" :class="{'highlight': totalCount>0}"></i>
+            </div>
+            <div v-show="totalCount>0" class="num">{{ totalCount }}</div>
           </div>
-          <div v-show="totalCount>0" class="num">{{ totalCount }}</div>
+          <div class="price" :class="{'highlight': totalPrice>0}">￥{{ totalPrice }}</div>
+          <div class="desc">另需配送费￥{{ deliveryPrice }}元 </div>
         </div>
-        <div class="price" :class="{'highlight': totalPrice>0}">￥{{ totalPrice }}</div>
-        <div class="desc">另需配送费￥{{ deliveryPrice }}元 </div>
-      </div>
-      <div class="content-right">
-        <div class="pay" :class="payClass">{{ payDesc }}</div>
-      </div>
-      <div class="ball-container">
-        <transition name="drop">
-          <div class="ball" v-for="ball in balls" v-show="ball.show"></div>
-        </transition>
-      </div>
-      <transition name="shopcart">
+        <div class="content-right">
+          <div class="pay" @click.stop.prevent="pay" :class="payClass">{{ payDesc }}</div>
+        </div>
+        <div class="ball-container">
+          <transition name="drop">
+            <div class="ball" v-for="ball in balls" v-show="ball.show"></div>
+          </transition>
+        </div>
+        <!--<transition name="shopcart">-->
         <div class="shopcart-list"  v-show="listShow">
           <div class="list-header">
             <h1 class="title">购物车</h1>
-            <span class="clear">清空</span>
+            <span class="clear" v-touch:tap="clearFoods">清空</span>
           </div>
           <div class="list-content" ref="shopcarScroll">
             <ul>
@@ -41,8 +42,12 @@
             </ul>
           </div>
         </div>
-      </transition>
+        <!--</transition>-->
+      </div>
     </div>
+    <transition name="filterMove">
+      <div @click="hideMask" class="filter" v-show="listShow"></div>
+    </transition>
   </div>
 </template>
 
@@ -143,6 +148,20 @@ export default {
         return;
       }
       this.fold = !this.fold;
+    },
+    clearFoods() {
+      this.selectFoods.forEach((food) => {
+        this.$set(food, 'count', 0);
+      });
+    },
+    hideMask() {
+      this.fold = true;
+    },
+    pay() {
+      if (this.totalPrice < this.minPrice) {
+        return;
+      }
+      console.log(`总金额${this.totalPrice}元`);
     },
   },
 };
@@ -249,7 +268,7 @@ export default {
     transition all .4s
   .shopcart-list
     position absolute
-    top 0
+    top -258px
     left 0
     z-index -1
     width 100%
@@ -268,7 +287,7 @@ export default {
         font-size 12px
     .list-content
       background #fff
-      max-height 218px;
+      height 218px;
       width 100%
       z-index 10
       overflow hidden
@@ -298,10 +317,25 @@ export default {
             top 0
             right 0
             display inline-block
-    &.shopcart-enter-active, &.shopcart-leave-active
-      transition all .5s
-    &.shopcart-enter, &.shopcart-leave-to
+/*    &.shopcart-enter-active, &.shopcart-leave-active
+      transition all 5s linear
+    &.shopcart-enter
       transform translate3d(0, 0, 0)
-    &.shopcart-enter-to, &.shopcart-leave
-      transform translate3d(0, -258px, 0)
+    &.shopcart-enter-to
+      transform translate3d(0, -258px, 0)*/
+.filter
+  position fixed
+  left 0
+  top 0
+  z-index 20
+  height 100%
+  width 100%
+  backdrop-filter blur (20px)
+  background rgba(7, 17, 27, .6)
+  &.filterMove-enter-active, &.filterMove-leave-active
+    transition all .5s ease
+  &.filterMove-enter, &.filterMove-leave-to
+    opacity 0
+  &.filterMove-leave, &.filterMove-enter-to
+    opacity 1
 </style>
