@@ -1,7 +1,7 @@
 <template>
   <div class="shopcart">
-    <div class="content" @click="toggleList($event)">
-      <div class="content-left">
+    <div class="content">
+      <div @click="toggleList($event)" class="content-left">
         <div class="logo-wrapper">
           <div class="logo" :class="{'highlight': totalCount>0}">
             <i class="icon-shopping_cart" :class="{'highlight': totalCount>0}"></i>
@@ -19,30 +19,29 @@
           <div class="ball" v-for="ball in balls" v-show="ball.show"></div>
         </transition>
       </div>
-      <!--<transition name="shopcart-move">-->
-      <div class="shopcart-list" v-show="showList">
-        <div class="list-header">
-          <h1 class="title">购物车</h1>
-          <span class="clear">清空</span>
+      <transition name="shopcart">
+        <div class="shopcart-list"  v-show="listShow">
+          <div class="list-header">
+            <h1 class="title">购物车</h1>
+            <span class="clear">清空</span>
+          </div>
+          <div class="list-content" ref="shopcarScroll">
+            <ul>
+              <li class="food" v-for="food in selectFoods">
+                <span class="name">{{ food.name }}</span>
+                <div class="price">
+                  <span class="">
+                    ￥{{ food.price * food.count }}
+                  </span>
+                </div>
+                <div class="cartcontroll-wrapper">
+                  <cart-controll :food="food"></cart-controll>
+                </div>
+              </li>
+            </ul>
+          </div>
         </div>
-        <div class="list-content" ref="shopcartList">
-          <ul>
-            <li class="food" v-for="food in selectFoods">
-              <span class="name">{{ food.name }}</span>
-              <div class="price">
-                <span class="">
-                  ￥{{ food.price * food.count }}
-                </span>
-              </div>
-              <div class="cartcontroll-wrapper">
-                <cart-controll :food="food"></cart-controll>
-              </div>
-            </li>
-          </ul>
-        </div>
-        <div class="filter"></div>
-      </div>
-      <!--</transition>-->
+      </transition>
     </div>
   </div>
 </template>
@@ -76,7 +75,7 @@ export default {
           show: false,
         },
       ],
-      showList: false,
+      fold: false,
     };
   },
   components: {
@@ -117,19 +116,33 @@ export default {
       }
       return 'enough';
     },
+    listShow() {
+      if (!this.totalCount) {
+        this.fold = true;
+        return false;
+      }
+      const show = !this.fold;
+      if (show) {
+        this.$nextTick(() => {
+          if (!this.shopcartScroll) {
+            this.shopcartScroll = new BScroll(this.$refs.shopcarScroll, {
+              click: true,
+            });
+          } else {
+            this.shopcartScroll.refresh();
+          }
+        });
+      }
+      return show;
+    },
   },
   methods: {
-    initScroll() {
-      this.shopcartScroll = new BScroll(this.$refs.shopcartList, {
-        preventDefault: false,
-      });
-    },
     toggleList() {
       if (!this.totalCount) {
-        this.showList = false;
+        this.fold = false;
         return;
       }
-      this.showList = !this.showList;
+      this.fold = !this.fold;
     },
   },
 };
@@ -236,16 +249,10 @@ export default {
     transition all .4s
   .shopcart-list
     position absolute
-    top -258px
-    height 258px
+    top 0
     left 0
     z-index -1
     width 100%
-    .filter
-      position absolute
-      width 100%
-      height 100%
-      background rgba(7, 17, 27, 0.6)
     .list-header
       height 40px
       line-height 40px
@@ -261,9 +268,7 @@ export default {
         font-size 12px
     .list-content
       background #fff
-      position absolute
-      top 40px
-      bottom 0
+      max-height 218px;
       width 100%
       z-index 10
       overflow hidden
@@ -293,4 +298,10 @@ export default {
             top 0
             right 0
             display inline-block
+    &.shopcart-enter-active, &.shopcart-leave-active
+      transition all .5s
+    &.shopcart-enter, &.shopcart-leave-to
+      transform translate3d(0, 0, 0)
+    &.shopcart-enter-to, &.shopcart-leave
+      transform translate3d(0, -258px, 0)
 </style>
