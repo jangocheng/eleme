@@ -20,29 +20,29 @@
             <div class="ball" v-for="ball in balls" v-show="ball.show"></div>
           </transition>
         </div>
-        <!--<transition name="shopcart">-->
-        <div class="shopcart-list"  v-show="listShow">
-          <div class="list-header">
-            <h1 class="title">购物车</h1>
-            <span class="clear" v-touch:tap="clearFoods">清空</span>
+        <transition name="shopcart">
+          <div class="shopcart-list" @click.stop.prevent=""  v-show="listShow">
+            <div class="list-header">
+              <h1 class="title">购物车</h1>
+              <span class="clear" v-touch:tap="clearFoods">清空</span>
+            </div>
+            <div class="list-content" ref="shopcarScroll">
+              <ul>
+                <li class="food" v-for="food in selectFoods">
+                  <span class="name">{{ food.name }}</span>
+                  <div class="price">
+                    <span class="">
+                      ￥{{ food.price * food.count }}
+                    </span>
+                  </div>
+                  <div class="cartcontroll-wrapper">
+                    <cart-controll :food="food"></cart-controll>
+                  </div>
+                </li>
+              </ul>
+            </div>
           </div>
-          <div class="list-content" ref="shopcarScroll">
-            <ul>
-              <li class="food" v-for="food in selectFoods">
-                <span class="name">{{ food.name }}</span>
-                <div class="price">
-                  <span class="">
-                    ￥{{ food.price * food.count }}
-                  </span>
-                </div>
-                <div class="cartcontroll-wrapper">
-                  <cart-controll :food="food"></cart-controll>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <!--</transition>-->
+        </transition>
       </div>
     </div>
     <transition name="filterMove">
@@ -85,11 +85,6 @@ export default {
   },
   components: {
     CartControll,
-  },
-  created() {
-    this.$nextTick(() => {
-      this.initScroll();
-    });
   },
   computed: {
     totalPrice() {
@@ -144,7 +139,7 @@ export default {
   methods: {
     toggleList() {
       if (!this.totalCount) {
-        this.fold = false;
+        this.fold = true;
         return;
       }
       this.fold = !this.fold;
@@ -317,12 +312,15 @@ export default {
             top 0
             right 0
             display inline-block
-/*    &.shopcart-enter-active, &.shopcart-leave-active
-      transition all 5s linear
-    &.shopcart-enter
+    &.shopcart-enter-active, &.shopcart-leave-active
+      transition all .4s linear
+      position absolute
+      left 0
+      top 0
+    &.shopcart-enter, &.shopcart-leave-to
       transform translate3d(0, 0, 0)
-    &.shopcart-enter-to
-      transform translate3d(0, -258px, 0)*/
+    &.shopcart-enter-to, &.shopcart-leave
+      transform translate3d(0, -258px, 0)
 .filter
   position fixed
   left 0
@@ -333,7 +331,7 @@ export default {
   backdrop-filter blur (20px)
   background rgba(7, 17, 27, .6)
   &.filterMove-enter-active, &.filterMove-leave-active
-    transition all .5s ease
+    transition all .4s ease
   &.filterMove-enter, &.filterMove-leave-to
     opacity 0
   &.filterMove-leave, &.filterMove-enter-to

@@ -221,8 +221,8 @@ export default {
         .desc
           font-size 10px
           color rgb(147, 153, 159)
-          line-height 10px
-          padding 8px 0
+          line-height 14px
+          padding 6px 0
         .extra
           font-size 0
           color rgb(147, 153, 159)
