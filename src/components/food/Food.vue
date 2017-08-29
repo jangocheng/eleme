@@ -34,9 +34,9 @@
         <div class="food-rating">
           <h1 class="title">商品评价</h1>
           <div class="rating-tab">
-            <span class="tab-item all" :class="{active:activeCode===2}" :activeCode="2" @click="tabHandler($event)">全部<span class="num">2</span></span>
-            <span class="tab-item posi" :class="{active:activeCode===0}" :activeCode="1" @click="tabHandler($event)">推荐<span class="num">2</span></span>
-            <span class="tab-item nega" :class="{active:activeCode===1}" :activeCode="0" @click="tabHandler($event)">吐槽<span class="num">2</span></span>
+            <span class="tab-item all" :class="{active:activeCode===2}" activeCode="2" @click="tabHandler(2)">全部<span class="num">2</span></span>
+            <span class="tab-item posi" :class="{active:activeCode===0}" activeCode="1" @click="tabHandler(0)">推荐<span class="num">2</span></span>
+            <span class="tab-item nega" :class="{active:activeCode===1}" activeCode="0" @click="tabHandler(1)">吐槽<span class="num">2</span></span>
           </div>
           <div class="only" :class="{active: onlyRead}" @click="onlyHandler">
             <i class="icon-check_circle" :class="{active:onlyRead}"></i>
@@ -106,8 +106,10 @@ export default {
     addFirst() {
       Vue.set(this.food, 'count', 1);
     },
-    tabHandler(ev) {
-      console.log(ev);
+    tabHandler(val) {
+      this.food.ratings.filter((item) => {
+        return item.rateType ===
+      });
     },
     onlyHandler() {
       this.onlyRead = !this.onlyRead;
