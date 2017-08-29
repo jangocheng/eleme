@@ -24,7 +24,7 @@
           <div class="shopcart-list" @click.stop.prevent=""  v-show="listShow">
             <div class="list-header">
               <h1 class="title">购物车</h1>
-              <span class="clear" v-touch:tap="clearFoods">清空</span>
+              <span class="clear" @click="clearFoods">清空</span>
             </div>
             <div class="list-content" ref="shopcarScroll">
               <ul>
@@ -52,6 +52,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+import Vue from 'vue';
 import BScroll from 'better-scroll';
 import CartControll from '../cartControll/CartControll';
 
@@ -146,7 +147,7 @@ export default {
     },
     clearFoods() {
       this.selectFoods.forEach((food) => {
-        this.$set(food, 'count', 0);
+        Vue.set(food, 'count', 0);
       });
     },
     hideMask() {

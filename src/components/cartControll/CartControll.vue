@@ -1,12 +1,12 @@
 <template>
   <div class="cart-controll">
     <transition name="move">
-      <div class="cart-decrese" v-show="food.count>0" v-touch:tap="decreaseFood">
-            <i class="inner icon-remove_circle_outline"></i>
-          </div>
+      <div class="cart-decrese" v-show="food.count>0" @click.stop.prevent="decreaseFood">
+        <i class="inner icon-remove_circle_outline"></i>
+      </div>
     </transition>
     <div class="cart-count" v-show="food.count>0"> {{food.count}} </div>
-    <div class="cart-add" v-touch:tap="addFood">
+    <div class="cart-add" @click.stop.prevent="addFood">
       <i class="icon-add_circle"></i>
     </div>
   </div>
@@ -27,6 +27,7 @@ export default {
   },
   methods: {
     addFood() {
+//      this.food.count ? this.food.count += 1 : Vue.set(this.food, 'count', 1);
       if (!this.food.count) {
         Vue.set(this.food, 'count', 1);
       } else {
@@ -34,11 +35,7 @@ export default {
       }
     },
     decreaseFood() {
-      if (this.food.count <= 0) {
-        this.food.count = 0;
-      } else {
-        this.food.count -= 1;
-      }
+      this.food.count = this.food.count <= 0 ? 0 : this.food.count - 1;
     },
   },
 };

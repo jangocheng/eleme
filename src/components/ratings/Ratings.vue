@@ -1,5 +1,5 @@
 <template>
-  <div class="" v-touch:tap="tapHandler">
+  <div class=""@click="tapHandler">
     <span>kskdj</span>
     <transition name="fade">
       <p v-show="show">ratings</p>
