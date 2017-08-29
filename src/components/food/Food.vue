@@ -34,20 +34,26 @@
         <div class="food-rating">
           <h1 class="title">商品评价</h1>
           <div class="rating-tab">
-            <span class="tab-item">全部<span class="num">2</span></span>
-            <span class="tab-item">推荐<span class="num">2</span></span>
-            <span class="tab-item">吐槽<span class="num">2</span></span>
+            <span class="tab-item all" :class="{active:activeCode===2}" :activeCode="2" @click="tabHandler($event)">全部<span class="num">2</span></span>
+            <span class="tab-item posi" :class="{active:activeCode===0}" :activeCode="1" @click="tabHandler($event)">推荐<span class="num">2</span></span>
+            <span class="tab-item nega" :class="{active:activeCode===1}" :activeCode="0" @click="tabHandler($event)">吐槽<span class="num">2</span></span>
           </div>
-          <div class="only" :class="{active: onlyRead}">
-            <i></i>
-            <p>只看有内容的评价</p>
+          <div class="only" :class="{active: onlyRead}" @click="onlyHandler">
+            <i class="icon-check_circle" :class="{active:onlyRead}"></i>
+            <p class="text">只看有内容的评价</p>
           </div>
         </div>
         <div class="rating-list">
           <div v-for="item in food.ratings">
-            <div class="date-time">{{ momentFormat(item.rateTime) }}</div>
-            <p class="text">{{item.text}}</p>
-            <img class="avatar" :src="item.avatar" alt="">
+            <div class="head">
+              <span class="rateTime">{{ momentFormat(item.rateTime) }}</span>
+              <span class="username">{{ item.username }}</span>
+              <img class="avatar" :src="item.avatar" alt="">
+            </div>
+            <div class="item-content">
+              <i class="icon icon-thumb_up"></i>
+              <p class="text">{{item.text}}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -72,6 +78,7 @@ export default {
     return {
       showFlag: false,
       onlyRead: false,
+      activeCode: 2,
     };
   },
   components: {
@@ -98,6 +105,17 @@ export default {
     },
     addFirst() {
       Vue.set(this.food, 'count', 1);
+    },
+    tabHandler(ev) {
+      console.log(ev);
+    },
+    onlyHandler() {
+      this.onlyRead = !this.onlyRead;
+//      if (this.onlyRead) {
+//
+//      } else {
+//
+//      }
     },
   },
 };
@@ -198,7 +216,8 @@ export default {
       padding 0 8px
       text-align justify
   .food-rating
-    padding 18px
+    padding 18px 18px 12px 18px
+    border-bottom 1px solid rgba(7, 17, 27, .1)
     .title
       margin-bottom 6px
       line-height 14px
@@ -206,7 +225,85 @@ export default {
       color rgb(7, 17, 27)
     .rating-tab
       font-size 0
+      margin-top 12px
       .tab-item
         display inline-block
         padding 8px 12px
+        line-height 12px
+        font-size 12px
+        color: rgb(77, 85, 93)
+        margin-right 8px
+        .num
+          line-height 10px
+          font-size 10px
+          margin-left 4px
+        &.posi, &.all
+          background #ccecf8
+          &.active
+            background rgb(0, 160, 220)
+            color: #fff
+        &.nega
+          background rgba(77, 85, 93, .2)
+          &.active
+            background rgb(77, 85, 93)
+            color: #fff
+    .only
+      margin-top 18px
+      font-size 0
+      border-top 1px solid rgba(7, 17, 27, .1)
+      .icon-check_circle
+        vertical-align top
+        display inline-block
+        padding-top 12px
+        line-height 24px
+        font-size 24px
+        color rgb(147, 153, 159)
+        margin-right 4px
+        &.active
+          color rgb(0, 160, 220)
+      .text
+        display inline-block
+        padding-top 12px
+        line-height 24px
+        font-size 12px
+        color rgb(147, 153, 159)
+        &.active
+          color rgb(0, 160, 220)
+  .rating-list
+    padding 18px
+    .head
+      display flex
+      span, img
+        display inline-block
+      .rateTime, .username
+        color rgb(147, 153, 159)
+        font-size 10px
+        line-height 12px
+        vertical-align top
+      .username
+        margin-right 6px
+      .rateTime
+        flex 1
+      .avatar
+        width 12px
+        height 12px
+        border-radius 50%
+    .item-content
+      display flex
+      padding 12px 0 16px 0
+      .icon, .text
+        display inline-block
+      .text
+        flex 1
+        font-size 12px
+        line-height 16px
+        color rgb(7, 17, 27)
+        vertical-align top
+      .icon
+        margin-right 4px
+        font-size 12px
+        vertical-align middle
+        color rgb(147, 153, 159)
+        &.icon-thumb_up
+          color rgb(0, 160, 220)
 </style>
