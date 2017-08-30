@@ -34,9 +34,9 @@
         <div class="food-rating">
           <h1 class="title">商品评价</h1>
           <div class="rating-tab">
-            <span class="tab-item all" :class="{active:activeCode===2}" activeCode="2" @click="tabHandler(2)">全部<span class="num">2</span></span>
-            <span class="tab-item posi" :class="{active:activeCode===0}" activeCode="1" @click="tabHandler(0)">推荐<span class="num">2</span></span>
-            <span class="tab-item nega" :class="{active:activeCode===1}" activeCode="0" @click="tabHandler(1)">吐槽<span class="num">2</span></span>
+            <span class="tab-item all" :class="{active:activeCode===2}" @click="tabHandler(2, $event)">全部<span class="num">{{ food.ratings.length }}</span></span>
+            <span class="tab-item posi" :class="{active:activeCode===0}" @click="tabHandler(0, $event)">推荐<span class="num">{{ posiList.length }}</span></span>
+            <span class="tab-item nega" :class="{active:activeCode===1}" @click="tabHandler(1, $event)">吐槽<span class="num">{{ negaList.length }}</span></span>
           </div>
           <div class="only" :class="{active: onlyRead}" @click="onlyHandler">
             <i class="icon-check_circle" :class="{active:onlyRead}"></i>
@@ -44,15 +44,16 @@
           </div>
         </div>
         <div class="rating-list">
-          <div v-for="item in food.ratings">
+          <div v-show="isShow(item)" v-for="item in food.ratings">
             <div class="head">
-              <span class="rateTime">{{ momentFormat(item.rateTime) }}</span>
+              <span class="rateTime">{{ item.rateTime | momentFormat }}</span>
               <span class="username">{{ item.username }}</span>
               <img class="avatar" :src="item.avatar" alt="">
             </div>
             <div class="item-content">
-              <i class="icon icon-thumb_up"></i>
-              <p class="text">{{item.text}}</p>
+              <i class="icon" :class="{'icon-thumb_up':item.rateType===0,'icon-thumb_down':item.rateType===1}"></i>
+              <p v-if="item.text" class="text">{{item.text}}</p>
+              <p  v-else="" class="text notext">暂无评论</p>
             </div>
           </div>
         </div>
@@ -63,6 +64,8 @@
 
 <script type="text/ecmascript-6">
 import Vue from 'vue';
+
+import moment from 'moment';
 import BScroll from 'better-scroll';
 import CartControll from '../cartControll/CartControll';
 import Split from '../split/Split';
@@ -85,6 +88,25 @@ export default {
     CartControll,
     Split,
   },
+  computed: {
+    posiList() {
+      if (!this.food.ratings) {
+        return [];
+      }
+      return this.food.ratings.filter(item => item.rateType === 0);
+    },
+    negaList() {
+      if (!this.food.ratings) {
+        return [];
+      }
+      return this.food.ratings.filter(item => item.rateType === 1);
+    },
+  },
+  filters: {
+    momentFormat(val) {
+      return moment(val).format('YYYY-MM-DD HH:mm');
+    },
+  },
   methods: {
     show() {
       this.showFlag = true;
@@ -97,27 +119,27 @@ export default {
         this.foodScroll.refresh();
       });
     },
-    momentFormat(val) {
-      return this.$moment(val).format('YYYY-MM-DD HH:mm');
-    },
     hide() {
       this.showFlag = false;
     },
     addFirst() {
       Vue.set(this.food, 'count', 1);
     },
-    tabHandler(val) {
-      this.food.ratings.filter((item) => {
-        return item.rateType ===
-      });
+    tabHandler(type, event) {
+      console.log(event);
+      this.activeCode = type;
     },
     onlyHandler() {
       this.onlyRead = !this.onlyRead;
-//      if (this.onlyRead) {
-//
-//      } else {
-//
-//      }
+    },
+    isShow(rating) {
+      if (this.onlyRead && !rating.text) {
+        return false;
+      }
+      if (this.activeCode === 2) {
+        return true;
+      }
+      return rating.rateType === this.activeCode;
     },
   },
 };
@@ -301,6 +323,8 @@ export default {
         line-height 16px
         color rgb(7, 17, 27)
         vertical-align top
+        &.notext
+          color #b7bbbf
       .icon
         margin-right 4px
         font-size 12px
