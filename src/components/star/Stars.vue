@@ -26,6 +26,11 @@ export default {
   },
   computed: {
     starType() {
+      if (this.size === 24) {
+        return 'star-24';
+      } else if (this.size === 36) {
+        return 'star-36';
+      }
       return 'star-48';
     },
     itemClasses() {
@@ -76,12 +81,27 @@ export default {
       height 15px
       marign-right 6px
       background-size 15px 15px
+      &.on
+        bg-image('star36_on')
+      &.half
+        bg-image('star36_half')
+      &.off
+        bg-image('star36_off')
+      &:last-child
+        margin-right 0
   &.star-24
     .star-item
       width 10px
       height 10px
       marign-right 3px
       background-size 10px 10px
-
+      &.on
+        bg-image('star24_on')
+      &.half
+        bg-image('star24_half')
+      &.off
+        bg-image('star24_off')
+      &:last-child
+        margin-right 0
 
 </style>

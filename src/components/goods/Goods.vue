@@ -71,11 +71,10 @@ export default {
     Food,
   },
   created() {
-    const that = this;
     this.$http.get('/api/goods').then((respnnse) => {
       const res = respnnse.data;
       if (res.code === 0) {
-        that.goods = res.data;
+        this.goods = res.data;
       }
       this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
       this.$nextTick(() => {
