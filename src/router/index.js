@@ -6,7 +6,7 @@ import Ratings from '@/components/ratings/Ratings';
 
 Vue.use(Router);
 export default new Router({
-  mode: 'history',
+  // mode: 'history',
   routes: [
     {
       path: '/',
