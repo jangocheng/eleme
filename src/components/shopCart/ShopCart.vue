@@ -28,7 +28,7 @@
             </div>
             <div class="list-content" ref="shopcarScroll">
               <ul>
-                <li class="food" v-for="food in selectFoods">
+                <li class="food" v-for="food in $store.state.selectedFoods">
                   <span class="name">{{ food.name }}</span>
                   <div class="price">
                     <span class="">
@@ -59,12 +59,6 @@ import CartControll from '../cartControll/CartControll';
 export default {
   name: '',
   props: {
-    selectFoods: {
-      type: Array,
-      default() {
-        return [];
-      },
-    },
     deliveryPrice: {
       type: Number,
       default: 0,
@@ -90,14 +84,14 @@ export default {
   computed: {
     totalPrice() {
       let total = 0;
-      this.selectFoods.forEach((food) => {
+      this.$store.state.selectedFoods.forEach((food) => {
         total += food.count * food.price;
       });
       return total;
     },
     totalCount() {
       let count = 0;
-      this.selectFoods.forEach((food) => {
+      this.$store.state.selectedFoods.forEach((food) => {
         count += food.count;
       });
       return count;

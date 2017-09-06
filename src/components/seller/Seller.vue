@@ -94,24 +94,24 @@ import Split from '../split/Split';
 
 export default {
   name: '',
+  props: {
+    seller: {
+      type: Object,
+      default: {},
+    },
+  },
   data() {
     return {
-      seller: {},
       collected: false,
     };
   },
-  mounted() {
+  created() {
     this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
-    this.$http.get('/api/seller').then((respnnse) => {
-      const res = respnnse.data;
-      if (res.code === 0) {
-        this.seller = res.data;
-        console.log(this.seller);
-      }
-      this.$nextTick(() => {
-        this.SellerWrapper = new BScroll(this.$refs.sellerWrapper, {
-          click: true,
-        });
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.SellerWrapper = new BScroll(this.$refs.sellerWrapper, {
+        click: true,
       });
       if (this.seller.pics) {
         const width = (126 * this.seller.pics.length) - 6;
@@ -131,7 +131,7 @@ export default {
   },
   methods: {
     collectHandler() {
-      console.log(this.collected);
+//      console.log(this.collected);
       this.collected = !this.collected;
     },
   },

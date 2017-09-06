@@ -1,8 +1,8 @@
 <template>
   <div class="goods">
     <div class="menu-wrapper" ref="menuWrapper">
-      <ul v-if="goods">
-        <li v-for="(item, index) in goods" class="menu-item border-1px" :class="{'current':currentIndex===index}" @click="selectMenu(index,$event)">
+      <ul v-if="$store.state.goods">
+        <li v-for="(item, index) in $store.state.goods" class="menu-item border-1px" :class="{'current':currentIndex===index}" @click="selectMenu(index,$event)">
           <span class="text">
             <span v-show="item.type>0" :class="classMap[item.type]" class="icon"></span>{{item.name}}
           </span>
@@ -11,7 +11,7 @@
     </div>
     <div class="foods-wrapper" ref="foodsWrapper">
       <ul>
-        <li v-for="(item, index) in goods" class="foods-list foot-list-hook">
+        <li v-for="(item, index) in $store.state.goods" class="foods-list foot-list-hook">
           <h1 class="title">{{item.name}}</h1>
           <ul>
             <li v-for="(food, index) in item.foods" class="food-item" @click="selectFood(food, $event)">
@@ -39,7 +39,6 @@
       </ul>
     </div>
     <food :food="selectedFood" ref="food"></food>
-    <shop-cart :select-foods="selectedFoods" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shop-cart>
   </div>
 </template>
 
@@ -58,7 +57,6 @@ export default {
   },
   data() {
     return {
-      goods: [],
       listHeight: [],
       scrollY: 0,
       selectedFood: {},
@@ -74,7 +72,7 @@ export default {
     this.$http.get('/api/goods').then((respnnse) => {
       const res = respnnse.data;
       if (res.code === 0) {
-        this.goods = res.data;
+        this.$store.state.goods = res.data;
       }
       this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
       this.$nextTick(() => {
@@ -93,17 +91,6 @@ export default {
         }
       }
       return 0;
-    },
-    selectedFoods() {
-      const foods = [];
-      this.goods.forEach((good) => {
-        good.foods.forEach((food) => {
-          if (food.count) {
-            foods.push(food);
-          }
-        });
-      });
-      return foods;
     },
   },
   methods: {

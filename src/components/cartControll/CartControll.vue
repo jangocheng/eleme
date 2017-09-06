@@ -33,9 +33,11 @@ export default {
       } else {
         this.food.count += 1;
       }
+      this.$store.commit('selectedFoods');
     },
     decreaseFood() {
       this.food.count = this.food.count <= 0 ? 0 : this.food.count - 1;
+      this.$store.commit('selectedFoods');
     },
   },
 };

@@ -33,8 +33,8 @@
         <split v-show="food.info"></split>
         <div class="food-rating">
           <h1 class="title">商品评价</h1>
-          <div class="rating-tab">
-            <span class="tab-item all" :class="{active:activeCode===2}" @click="tabHandler(2, $event)">全部<span class="num">{{ food.ratings.length }}</span></span>
+          <div v-if="food.ratings" class="rating-tab">
+            <span class="tab-item all" :class="{active:activeCode===2}" @click="tabHandler(2, $event)">全部<span class="num">{{ allList.length }}</span></span>
             <span class="tab-item posi" :class="{active:activeCode===0}" @click="tabHandler(0, $event)">推荐<span class="num">{{ posiList.length }}</span></span>
             <span class="tab-item nega" :class="{active:activeCode===1}" @click="tabHandler(1, $event)">吐槽<span class="num">{{ negaList.length }}</span></span>
           </div>
@@ -53,7 +53,7 @@
             <div class="item-content">
               <i class="icon" :class="{'icon-thumb_up':item.rateType===0,'icon-thumb_down':item.rateType===1}"></i>
               <p v-if="item.text" class="text">{{item.text}}</p>
-              <p  v-else="" class="text notext">暂无评论</p>
+              <p v-else="" class="text notext">暂无评论</p>
             </div>
           </div>
         </div>
@@ -64,7 +64,6 @@
 
 <script type="text/ecmascript-6">
 import Vue from 'vue';
-
 import moment from 'moment';
 import BScroll from 'better-scroll';
 import CartControll from '../cartControll/CartControll';
@@ -93,13 +92,28 @@ export default {
       if (!this.food.ratings) {
         return [];
       }
+      if (this.onlyRead) {
+        return this.food.ratings.filter(item => item.rateType === 0 && item.text !== '');
+      }
       return this.food.ratings.filter(item => item.rateType === 0);
     },
     negaList() {
       if (!this.food.ratings) {
         return [];
       }
+      if (this.onlyRead) {
+        return this.food.ratings.filter(item => item.rateType === 1 && item.text !== '');
+      }
       return this.food.ratings.filter(item => item.rateType === 1);
+    },
+    allList() {
+      if (!this.food.ratings) {
+        return [];
+      }
+      if (this.onlyRead) {
+        return this.food.ratings.filter(item => item.text !== '');
+      }
+      return this.food.ratings;
     },
   },
   filters: {
@@ -125,8 +139,7 @@ export default {
     addFirst() {
       Vue.set(this.food, 'count', 1);
     },
-    tabHandler(type, event) {
-      console.log(event);
+    tabHandler(type) {
       this.activeCode = type;
     },
     onlyHandler() {

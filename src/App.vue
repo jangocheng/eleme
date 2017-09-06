@@ -13,12 +13,17 @@
       </div>
     </div>
 
-    <router-view :seller="seller"></router-view>
+    <keep-alive>
+      <router-view :seller="seller"></router-view>
+    </keep-alive>
+
+    <shop-cart :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shop-cart>
   </div>
 </template>
 
 <script>
 import VHeader from './components/header/Header';
+import ShopCart from './components/shopCart/ShopCart';
 
 export default {
   name: 'app',
@@ -39,6 +44,7 @@ export default {
   },
   components: {
     VHeader,
+    ShopCart,
   },
 };
 </script>
