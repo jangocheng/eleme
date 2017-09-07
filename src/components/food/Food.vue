@@ -141,9 +141,15 @@ export default {
     },
     tabHandler(type) {
       this.activeCode = type;
+      this.$nextTick(() => {
+        this.foodScroll.refresh();
+      });
     },
     onlyHandler() {
       this.onlyRead = !this.onlyRead;
+      this.$nextTick(() => {
+        this.foodScroll.refresh();
+      });
     },
     isShow(rating) {
       if (this.onlyRead && !rating.text) {

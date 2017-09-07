@@ -155,6 +155,9 @@ export default {
     },
     onlyHandler() {
       this.onlyRead = !this.onlyRead;
+      this.$nextTick(() => {
+        this.RatingWrapper.refresh();
+      });
     },
     isShow(rating) {
       if (this.onlyRead && !rating.text) {

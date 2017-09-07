@@ -9,7 +9,6 @@ import router from './router';
 
 Fastclick.attach(document.body);
 Vue.config.productionTip = false;
-// Object.defineProperty(Vue.prototype, '$moment', { value: moment });
 Vue.prototype.$http = axios;
 Vue.use(Vuex);
 
@@ -19,7 +18,12 @@ const store = new Vuex.Store({
     goods: [],
   },
   mutations: {
-    selectedFoods() {
+    ADDFOOD() {
+
+    },
+    DECREASEFOOD() {
+    },
+    SELECTEDFOODS() {
       const foods = [];
       this.state.goods.forEach((good) => {
         good.foods.forEach((food) => {
@@ -29,6 +33,11 @@ const store = new Vuex.Store({
         });
       });
       this.state.selectedFoods = foods;
+    },
+  },
+  actions: {
+    selectedfoods({ commit }) {
+      commit('SELECTEDFOODS');
     },
   },
 });
