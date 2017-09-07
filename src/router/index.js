@@ -4,6 +4,10 @@ import Goods from '@/components/goods/Goods';
 import Seller from '@/components/seller/Seller';
 import Ratings from '@/components/ratings/Ratings';
 
+// const Seller = r => require.ensure([], () => r(require('@/components/seller/Seller.vue')));
+// const Goods = r => require.ensure([], () => r(require('@/components/goods/Goods')));
+// const Ratings = r => require.ensure([], () => r(require('@/components/ratings/Ratings')));
+
 Vue.use(Router);
 export default new Router({
   // mode: 'history',

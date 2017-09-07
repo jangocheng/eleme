@@ -13,9 +13,11 @@
       </div>
     </div>
 
-    <keep-alive>
-      <router-view :seller="seller"></router-view>
-    </keep-alive>
+    <transition name="fade" mode="out-in">
+      <keep-alive>
+        <router-view :seller="seller"></router-view>
+      </keep-alive>
+    </transition>
 
     <shop-cart :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shop-cart>
   </div>
@@ -50,25 +52,31 @@ export default {
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
-  @import "commom/stylus/base"
-  @import "commom/stylus/mixin"
-  #app
-    .tab
-      display flex
-      width 100%
-      height 40px
-      line-height 40px
-      justify-content space-around
-      border-1px(#e5e5e5)
-    .tab-item
-      text-align center
-      flex 1
-      & > a
-        display block
-        font-size 14px
-        color rgb(77, 85, 93)
-      .tab-item-active
-        color rgb(240, 20, 20)
-
+@import "commom/stylus/base"
+@import "commom/stylus/mixin"
+#app
+  .tab
+    display flex
+    width 100%
+    height 40px
+    line-height 40px
+    justify-content space-around
+    border-1px(#e5e5e5)
+  .tab-item
+    text-align center
+    flex 1
+    & > a
+      display block
+      font-size 14px
+      color rgb(77, 85, 93)
+    .tab-item-active
+      color rgb(240, 20, 20)
+.fade-enter-active, .fade-leave-active {
+  opacity: 1;
+  transition: opacity .3s
+}
+.fade-enter, .fade-leave-active {
+  opacity: 0
+}
 
 </style>
