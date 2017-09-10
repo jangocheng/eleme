@@ -14,6 +14,8 @@ module.exports = {
   output: {
     path: config.build.assetsRoot,
     filename: '[name].js',
+    // 组件懒加载配置
+    chunkFilename: 'chunk[id].js?[chunkhash]',
     publicPath: process.env.NODE_ENV === 'production'
       ? config.build.assetsPublicPath
       : config.dev.assetsPublicPath

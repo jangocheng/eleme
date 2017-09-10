@@ -91,6 +91,9 @@ export default {
       activeCode: 2,
     };
   },
+  created() {
+    console.log(0);
+  },
   computed: {
     posiList() {
       if (!this.ratings) {
